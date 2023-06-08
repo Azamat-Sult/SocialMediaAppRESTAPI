@@ -39,4 +39,12 @@ public class UserDaoComponent {
         return user;
     }
 
+    public void deleteUserById(Long id) {
+        User foundUser = users.stream().filter(user -> id.equals(user.getId()))
+                .findFirst()
+                .orElse(null);
+        if (foundUser == null) throw new UserNotFoundException("id: " + id);
+        users.remove(foundUser);
+    }
+
 }
