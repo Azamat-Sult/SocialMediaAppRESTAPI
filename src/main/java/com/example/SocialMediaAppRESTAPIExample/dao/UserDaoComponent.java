@@ -1,7 +1,10 @@
 package com.example.SocialMediaAppRESTAPIExample.dao;
 
+import com.example.SocialMediaAppRESTAPIExample.controller.UserController;
 import com.example.SocialMediaAppRESTAPIExample.exception.UserNotFoundException;
 import com.example.SocialMediaAppRESTAPIExample.model.User;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -25,12 +28,17 @@ public class UserDaoComponent {
         return users;
     }
 
-    public User findUserById(Long id) {
+    public EntityModel<User> findUserById(Long id) {
         User foundUser = users.stream().filter(user -> id.equals(user.getId()))
                 .findFirst()
                 .orElse(null);
         if (foundUser == null) throw new UserNotFoundException("id: " + id);
-        return foundUser;
+
+        EntityModel<User> entityModel = EntityModel.of(foundUser);
+        WebMvcLinkBuilder linkForFindAllUsers =
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).findAllUsers());
+        entityModel.add(linkForFindAllUsers.withRel("all-users"));
+        return entityModel;
     }
 
     public User createUser(User user) {
