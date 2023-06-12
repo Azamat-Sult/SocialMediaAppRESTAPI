@@ -1,11 +1,9 @@
 package com.example.SocialMediaAppRESTAPIExample.controller;
 
-import com.example.SocialMediaAppRESTAPIExample.dao.UserDaoComponent;
 import com.example.SocialMediaAppRESTAPIExample.model.UserDto;
+import com.example.SocialMediaAppRESTAPIExample.service.UserJPAService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,28 +11,26 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserJPAController {
 
-    private final UserDaoComponent userDaoComponent;
-    private final MessageSource messageSource;
+    private final UserJPAService userJPAService;
 
-    @GetMapping("/users")
+    @GetMapping("/jpa/users")
     public List<UserDto> findAllUsers() {
-        return userDaoComponent.findAllUsers();
+        return userJPAService.findAllUsers();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/jpa/users/{id}")
     public EntityModel<UserDto> findUserById(@PathVariable Long id) {
-        return userDaoComponent.findUserById(id);
+        return userJPAService.findUserById(id);
     }
 
-    @PostMapping("/users")
+    @PostMapping("/jpa/users")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-        UserDto createdUserDto = userDaoComponent.createUser(userDto);
+        UserDto createdUserDto = userJPAService.createUser(userDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(createdUserDto.getId())
@@ -42,15 +38,9 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/jpa/users/{id}")
     public void deleteUserById(@PathVariable Long id) {
-        userDaoComponent.deleteUserById(id);
-    }
-
-    @GetMapping("/hello-internationalized")
-    public String helloInternationalized() {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage("hello.message", null, "Default Message", locale);
+        userJPAService.deleteUserById(id);
     }
 
 }

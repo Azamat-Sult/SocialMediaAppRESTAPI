@@ -1,5 +1,6 @@
 package com.example.SocialMediaAppRESTAPIExample.model;
 
+import com.example.SocialMediaAppRESTAPIExample.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -10,7 +11,7 @@ import java.time.Instant;
 
 @Data
 @AllArgsConstructor
-public class User {
+public class UserDto {
 
     private Long id;
     @JsonProperty("user_name")
@@ -19,5 +20,13 @@ public class User {
     @JsonProperty("birth_date")
     @Past(message = "Birth date should be in the past")
     private Instant birthDate;
+
+    public UserEntity toEntity() {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(this.id);
+        userEntity.setName(this.name);
+        userEntity.setBirthDate(this.getBirthDate());
+        return userEntity;
+    }
 
 }
