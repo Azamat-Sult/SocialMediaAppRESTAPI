@@ -1,6 +1,9 @@
 package com.example.SocialMediaAppRESTAPIExample.controller;
 
+import com.example.SocialMediaAppRESTAPIExample.model.CreatePostDto;
+import com.example.SocialMediaAppRESTAPIExample.model.PostDto;
 import com.example.SocialMediaAppRESTAPIExample.model.UserDto;
+import com.example.SocialMediaAppRESTAPIExample.service.PostJPAService;
 import com.example.SocialMediaAppRESTAPIExample.service.UserJPAService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import java.util.List;
 public class UserJPAController {
 
     private final UserJPAService userJPAService;
+    private final PostJPAService postJPAService;
 
     @GetMapping("/jpa/users")
     public List<UserDto> findAllUsers() {
@@ -41,6 +45,16 @@ public class UserJPAController {
     @DeleteMapping("/jpa/users/{id}")
     public void deleteUserById(@PathVariable Long id) {
         userJPAService.deleteUserById(id);
+    }
+
+    @GetMapping("/jpa/users/{id}/posts")
+    public List<PostDto> getUserPostsByUserId(@PathVariable Long id) {
+        return userJPAService.getUserPostsByUserId(id);
+    }
+
+    @PostMapping("/jpa/users/{id}/posts")
+    public PostDto createPostForUser(@PathVariable Long id, @Valid @RequestBody CreatePostDto newPost) {
+        return postJPAService.saveNewPostToUser(id, newPost);
     }
 
 }

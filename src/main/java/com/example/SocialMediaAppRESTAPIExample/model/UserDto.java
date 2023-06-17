@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -21,11 +23,14 @@ public class UserDto {
     @Past(message = "Birth date should be in the past")
     private Instant birthDate;
 
+    private List<PostDto> posts;
+
     public UserEntity toEntity() {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(this.id);
         userEntity.setName(this.name);
         userEntity.setBirthDate(this.getBirthDate());
+        userEntity.setPosts(this.posts.stream().map(PostDto::toEntity).collect(Collectors.toList()));
         return userEntity;
     }
 

@@ -3,6 +3,7 @@ package com.example.SocialMediaAppRESTAPIExample.service;
 import com.example.SocialMediaAppRESTAPIExample.controller.UserController;
 import com.example.SocialMediaAppRESTAPIExample.entity.UserEntity;
 import com.example.SocialMediaAppRESTAPIExample.exception.UserNotFoundException;
+import com.example.SocialMediaAppRESTAPIExample.model.PostDto;
 import com.example.SocialMediaAppRESTAPIExample.model.UserDto;
 import com.example.SocialMediaAppRESTAPIExample.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,12 @@ public class UserJPAService {
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<PostDto> getUserPostsByUserId(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id: " + id))
+                .toDto().getPosts();
     }
 
 }

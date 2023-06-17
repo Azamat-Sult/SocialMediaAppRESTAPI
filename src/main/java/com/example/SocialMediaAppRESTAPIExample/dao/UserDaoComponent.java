@@ -19,9 +19,9 @@ public class UserDaoComponent {
     private static Long usersCount = 0L;
 
     static {
-        userDtos.add(new UserDto(++usersCount, "User 1", Instant.now().minus(30, ChronoUnit.DAYS)));
-        userDtos.add(new UserDto(++usersCount, "User 2", Instant.now().minus(25, ChronoUnit.DAYS)));
-        userDtos.add(new UserDto(++usersCount, "User 3", Instant.now().minus(20, ChronoUnit.DAYS)));
+        userDtos.add(new UserDto(++usersCount, "User 1", Instant.now().minus(30, ChronoUnit.DAYS), List.of()));
+        userDtos.add(new UserDto(++usersCount, "User 2", Instant.now().minus(25, ChronoUnit.DAYS), List.of()));
+        userDtos.add(new UserDto(++usersCount, "User 3", Instant.now().minus(20, ChronoUnit.DAYS), List.of()));
     }
 
     public List<UserDto> findAllUsers() {

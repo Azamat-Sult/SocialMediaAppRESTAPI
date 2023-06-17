@@ -1,12 +1,13 @@
 package com.example.SocialMediaAppRESTAPIExample.entity;
 
 import com.example.SocialMediaAppRESTAPIExample.model.UserDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity(name = "user_details")
@@ -18,8 +19,14 @@ public class UserEntity {
     private String name;
     private Instant birthDate;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<PostEntity> posts;
+
     public UserDto toDto() {
-        return new UserDto(this.id, this.name, this.birthDate);
+        return new UserDto(this.id, this.name, this.birthDate, this.posts.stream()
+                .map(PostEntity::toDto)
+                .collect(Collectors.toList()));
     }
 
 }
